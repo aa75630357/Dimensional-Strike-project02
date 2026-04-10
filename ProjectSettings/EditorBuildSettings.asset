@@ -6,13 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/project/StartMenu.unity
+    path: Assets/project/Scenes/StartMenu.unity
     guid: 98b76a85a135ccf46b7129784bad53cd
   - enabled: 1
-    path: Assets/project/WW.unity
+    path: Assets/project/Scenes/WW.unity
     guid: 53a1902fbcfbd2540912ced1b80a71d8
   - enabled: 1
-    path: Assets/project/howToWW.unity
+    path: Assets/project/Scenes/howToWW.unity
     guid: bd66e1fec885a3e4dad4bf0f6033bbec
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
