@@ -66,5 +66,5 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "Dimensional-Strike-project02.sln"
+    "dotnet.defaultSolution": "Dimensional-Strike-project02.slnx"
 }
