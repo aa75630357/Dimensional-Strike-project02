@@ -1,57 +1,31 @@
+using System;
 using UnityEngine;
 
 public class EnemyGlow : MonoBehaviour
 {
     [Header("判斷是否亮(打勾3D亮)(不打勾2D亮)")]
-    public bool lightIn3D;
-
-    [Header("怪物外框物件 (請把4個邊框都拉進來)")]
-    public Renderer[] outlineRenderers; // 這裡改成陣列了！可以放無限多個
-
-    [Header("發光設定")]
-    public Color glowColor = Color.red;
-    public float glowIntensity = 2f; // 可以手動調亮度的倍數
-    
-    private Material[] mats; // 用來存那4個邊框的材質球
-    private ViewController viewCtrl; // 用來存你的視角控制器
-
+    public bool light3D = true;
+    private ViewController viewCtrl; //是3D還是2D
+    private Outline outline;        //邊框
     void Start()
     {
-        // 1. 初始化材質球陣列，並確保它們都開啟發光功能
-        mats = new Material[outlineRenderers.Length];
-        for (int i = 0; i < outlineRenderers.Length; i++)
+        outline = GetComponent<Outline>();
+        viewCtrl = FindFirstObjectByType<ViewController>();
+        if (viewCtrl == null)
         {
-            if (outlineRenderers[i] != null)
-            {
-                mats[i] = outlineRenderers[i].material;
-                mats[i].EnableKeyword("_EMISSION");
-            }
+            Debug.LogError(gameObject.name + " 我找不到 ViewControlle");
         }
-        
-        // 2. 自動在場景中找到你的 ViewController
-        viewCtrl = FindObjectOfType<ViewController>();
+        if (outline == null)
+        {
+            Debug.LogError(gameObject.name + " 我身上沒有掛Outline");
+        }
     }
-
     void Update()
     {
-        if (viewCtrl == null) return;
+        if(outline == null || viewCtrl == null) return;
+        //2D時候會是falue，3D的時候會是true
+        //is3DMode也是同個道理
+        outline.enabled = (light3D == viewCtrl.is3DMode);
 
-        // 3. 抓取現在的視角維度
-        bool currentIs3D = viewCtrl.is3DMode;
-
-        // 4. 判斷是否在對的維度
-        bool shouldGlow = (currentIs3D && lightIn3D) || (!currentIs3D && !lightIn3D);
-
-        // 5. 決定最終顏色
-        Color finalColor = shouldGlow ? glowColor * glowIntensity : Color.black;
-
-        // 6. 用迴圈一次把4個邊框的顏色全部改掉！
-        for (int i = 0; i < mats.Length; i++)
-        {
-            if (mats[i] != null)
-            {
-                mats[i].SetColor("_EmissionColor", finalColor);
-            }
-        }
     }
 }

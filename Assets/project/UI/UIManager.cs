@@ -84,10 +84,14 @@ public class UIManager : MonoBehaviour
         Cursor.visible = true;
     }
     public void RestartGame()
-    {// 1. 解除時間暫停 (超級重要！不然重開後遊戲還是當機狀態)
+    {// 1. 解除時間暫停 (不然重開後遊戲還是當機狀態)
         Time.timeScale = 1f;
 
         // 2. 讀取「現在正在玩的這個場景」，達成完美重置！
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void ToMain()
+    {
+        SceneManager.LoadScene("StartMenu");
     }
 }

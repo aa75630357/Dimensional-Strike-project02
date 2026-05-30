@@ -37,6 +37,7 @@ public class PlayerShooter : MonoBehaviour
             currentAmmo -= 2;
             if (UIManager.instance != null) UIManager.instance.UpdateAmmo(currentAmmo / maxAmmo);
             Shooter();
+            LaserUpdate();
         }
     }
     void LateUpdate()
@@ -95,10 +96,29 @@ public class PlayerShooter : MonoBehaviour
         if (bullet != null && gunPoint != null)
         {
             GameObject newBullet = Instantiate(bullet, gunPoint.position, gunPoint.rotation);
-            Bullet bulletScript = newBullet.GetComponent<Bullet>();
-            if (bulletScript != null)
+        }
+    }
+    void LaserUpdate()
+    {
+        Ray ray;
+        if(viewCtrl.is3DMode){ray = new Ray(mainCam.transform.position, mainCam.transform.forward);}
+        else{ray = mainCam.ScreenPointToRay(Input.mousePosition);}
+        
+
+
+        if(Physics.Raycast(ray, out RaycastHit hit, 100f))
+        {
+            Debug.Log("開槍！雷射打到了：[" + hit.collider.gameObject.name + "]，它的 Tag 是：[" + hit.collider.tag + "]");
+            EnemyAI enemy = hit.collider.GetComponentInParent<EnemyAI>();
+            if(viewCtrl.is3DMode && hit.collider.CompareTag("Enemy3D"))
             {
-                bulletScript.isFiredIn3D = viewCtrl.is3DMode;
+                Destroy(enemy.gameObject);
+                if (UIManager.instance != null) UIManager.instance.AddScore(1);
+            }
+            else if(!viewCtrl.is3DMode && hit.collider.CompareTag("Enemy2D"))
+            {
+                Destroy(enemy.gameObject);
+                if (UIManager.instance != null) UIManager.instance.AddScore(1);
             }
         }
     }
